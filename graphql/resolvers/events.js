@@ -20,6 +20,7 @@ module.exports = {
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }
+
     const event = new Event({
       title: args.eventInput.title,
       description: args.eventInput.description,
@@ -27,7 +28,9 @@ module.exports = {
       date: new Date(args.eventInput.date),
       creator: req.userId
     });
+
     let createdEvent;
+
     try {
       const result = await event.save();
 
@@ -35,9 +38,10 @@ module.exports = {
 
       const creator = await User.findById(req.userId);
 
-      if (!creator) {
+      if ( !creator ) {
         throw new Error('User not found.')
       }
+
       creator.createdEvents.push(event);
       await creator.save();
 
